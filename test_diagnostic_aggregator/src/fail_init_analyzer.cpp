@@ -33,7 +33,7 @@
  *********************************************************************/
 
 /*!
- * \author Kevin Watts 
+ * \author Kevin Watts
  */
 
 #include "test_diagnostic_aggregator/fail_init_analyzer.h"
@@ -43,25 +43,26 @@ using namespace test_diagnostic_aggregator;
 using namespace std;
 
 PLUGINLIB_EXPORT_CLASS(test_diagnostic_aggregator::FailInitAnalyzer,
-                       diagnostic_aggregator::Analyzer)
+  diagnostic_aggregator::Analyzer)
 
-FailInitAnalyzer::FailInitAnalyzer() :
-  path_(""),
+FailInitAnalyzer::FailInitAnalyzer()
+: path_(""),
   nice_name_("")
-{ }
+{}
 
-FailInitAnalyzer::~FailInitAnalyzer() { }
+FailInitAnalyzer::~FailInitAnalyzer() {}
 
 
-bool FailInitAnalyzer::init(const string base_name, const ros::NodeHandle &n)
-{ 
+bool FailInitAnalyzer::init(const string base_name, const ros::NodeHandle & n)
+{
   nice_name_ = "Fail Init";
 
   // path_ = BASE_NAME/Motors
-  if (base_name == "/")
+  if (base_name == "/") {
     path_ = base_name + nice_name_;
-  else
+  } else {
     path_ = base_name + "/" + nice_name_;
+  }
 
   ROS_INFO("FailInitAnalyzer is returning false. Fails to initialize on purpose");
   return false;
@@ -78,9 +79,9 @@ bool FailInitAnalyzer::analyze(const boost::shared_ptr<StatusItem> item)
   return false;
 }
 
-vector<boost::shared_ptr<diagnostic_msgs::DiagnosticStatus> > FailInitAnalyzer::report()
+vector<boost::shared_ptr<diagnostic_msgs::DiagnosticStatus>> FailInitAnalyzer::report()
 {
-  vector<boost::shared_ptr<diagnostic_msgs::DiagnosticStatus> > output;
+  vector<boost::shared_ptr<diagnostic_msgs::DiagnosticStatus>> output;
 
   return output;
 }

@@ -1,13 +1,13 @@
 /*********************************************************************
 * Software License Agreement (BSD License)
-* 
+*
 *  Copyright (c) 2008, Willow Garage, Inc.
 *  All rights reserved.
-* 
+*
 *  Redistribution and use in source and binary forms, with or without
 *  modification, are permitted provided that the following conditions
 *  are met:
-* 
+*
 *   * Redistributions of source code must retain the above copyright
 *     notice, this list of conditions and the following disclaimer.
 *   * Redistributions in binary form must reproduce the above
@@ -17,7 +17,7 @@
 *   * Neither the name of the Willow Garage nor the names of its
 *     contributors may be used to endorse or promote products derived
 *     from this software without specific prior written permission.
-* 
+*
 *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
@@ -48,58 +48,58 @@ TEST(SelfTest, runSelfTest)
   nh_private.param("node_to_test", node_to_test, std::string());
   nh_private.param("max_delay", max_delay, 60.);
   ASSERT_FALSE(node_to_test.empty()) << "selftest_rostest needs the \"node_to_test\" parameter.";
-    
-  std::string service_name = node_to_test+"/self_test";
+
+  std::string service_name = node_to_test + "/self_test";
   ros::service::waitForService(service_name, max_delay);
 
   diagnostic_msgs::SelfTest srv;
-  
-  if (nh.serviceClient<diagnostic_msgs::SelfTest>(service_name).call(srv))
-  {
-    diagnostic_msgs::SelfTest::Response &res = srv.response;
-    
+
+  if (nh.serviceClient<diagnostic_msgs::SelfTest>(service_name).call(srv)) {
+    diagnostic_msgs::SelfTest::Response & res = srv.response;
+
     std::string passfail;
 
-    if (res.passed)
+    if (res.passed) {
       passfail = "PASSED";
-    else
+    } else {
       passfail = "FAILED";
-    
+    }
+
     EXPECT_TRUE(res.passed) << "Overall self-test FAILED.";
 
     printf("Self test %s for device with id: [%s]\n", passfail.c_str(), res.id.c_str());
 
-    for (size_t i = 0; i < res.status.size(); i++)
-    {
+    for (size_t i = 0; i < res.status.size(); i++) {
       printf("%2d) %s\n", ((int) i + 1), res.status[i].name.c_str());
-      if (res.status[i].level == 0)
+      if (res.status[i].level == 0) {
         printf("     [OK]: ");
-      else if (res.status[i].level == 1)
+      } else if (res.status[i].level == 1) {
         printf("     [WARNING]: ");
-      else
+      } else {
         printf("     [ERROR]: ");
+      }
 
       printf("%s\n", res.status[i].message.c_str());
-    
-      EXPECT_EQ(0, res.status[i].level) << res.status[i].name << " did not PASS: " << res.status[i].message;
 
-      for (size_t j = 0; j < res.status[i].values.size(); j++)
-        printf("      [%s] %s\n", res.status[i].values[j].key.c_str(), res.status[i].values[j].value.c_str());
+      EXPECT_EQ(0,
+        res.status[i].level) << res.status[i].name << " did not PASS: " << res.status[i].message;
+
+      for (size_t j = 0; j < res.status[i].values.size(); j++) {
+        printf("      [%s] %s\n",
+          res.status[i].values[j].key.c_str(), res.status[i].values[j].value.c_str());
+      }
 
       printf("\n");
     }
-  }
-  else
-  {
+  } else {
     FAIL() << "Unable to trigger self-test.";
     printf("Failed to call service.\n");
   }
 }
 
-int main(int argc, char **argv)
+int main(int argc, char ** argv)
 {
   ros::init(argc, argv, "selftest_nodetest");
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
-

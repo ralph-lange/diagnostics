@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2008, Willow Garage, Inc.
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  *     * Redistributions of source code must retain the above copyright
  *       notice, this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright
@@ -13,7 +13,7 @@
  *     * Neither the name of the <ORGANIZATION> nor the names of its
  *       contributors may be used to endorse or promote products derived from
  *       this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -41,7 +41,6 @@
 class MyNode
 {
 public:
-
   // self_test::TestRunner is the handles sequencing driver self-tests.
   self_test::TestRunner self_test_;
 
@@ -50,12 +49,13 @@ public:
 
   ros::NodeHandle nh_;
 
-  MyNode() : self_test_()
+  MyNode()
+  : self_test_()
   {
     // If any setup work needs to be done before running the tests,
     // a pretest can be defined. It is just like any other test, but
     // doesn't actually do any testing.
-    self_test_.add("Pretest", this, &MyNode::pretest );
+    self_test_.add("Pretest", this, &MyNode::pretest);
 
     // Tests added will be run in the order in which they are added. Each
     // test has a name that will be automatically be filled in the
@@ -65,28 +65,29 @@ public:
     // diagnostic_updater::DiagnosticTaskVector. You will have to refer to
     // the diagnostic_updater doxygen documentation to find them:
     // http://www.ros.org/doc/api/diagnostic_updater/html/classdiagnostic__updater_1_1DiagnosticTaskVector.html
-    self_test_.add("ID Lookup",                 this, &MyNode::test1);
+    self_test_.add("ID Lookup", this, &MyNode::test1);
     self_test_.add("Exception generating test", this, &MyNode::test2);
-    self_test_.add("Value generating test",     this, &MyNode::test3);
-    self_test_.add("Value testing test",        this, &MyNode::test4);
-    self_test_.add("Value testing test2",        this, &MyNode::test4);
-    
+    self_test_.add("Value generating test", this, &MyNode::test3);
+    self_test_.add("Value testing test", this, &MyNode::test4);
+    self_test_.add("Value testing test2", this, &MyNode::test4);
+
     // You can remove a test by using its name (documented in
     // diagnostic_updater).
-    if (!self_test_.removeByName("Value testing test2"))
+    if (!self_test_.removeByName("Value testing test2")) {
       ROS_ERROR("Value testing test2 was not found when trying to remove it.");
+    }
 
     // If any cleanup work needs to be done after running the tests,
-    // a posttest can be defined. It is just like any other test, but 
+    // a posttest can be defined. It is just like any other test, but
     // doesn't actually do any testing.
-    self_test_.add("Posttest", this, &MyNode::pretest );
+    self_test_.add("Posttest", this, &MyNode::pretest);
   }
 
-  void pretest(diagnostic_updater::DiagnosticStatusWrapper& status)
+  void pretest(diagnostic_updater::DiagnosticStatusWrapper & status)
   {
     ROS_INFO("Doing preparation stuff before we run our test.\n");
     status.summary(diagnostic_msgs::DiagnosticStatus::OK, "Pretest completed successfully.");
-    
+
     some_val = 1.0;
   }
 
@@ -95,16 +96,15 @@ public:
   // The status.name is automatically set to the name that was passed to add.
   // A DiagnosticStatusWrapper is used instead of a DiagnosticStatus
   // because it provides useful convenience methods.
-  void test1(diagnostic_updater::DiagnosticStatusWrapper& status)
+  void test1(diagnostic_updater::DiagnosticStatusWrapper & status)
   {
     // Look up ID here
     char ID[] = "12345";
     bool lookup_successful = true;
 
-    if (lookup_successful)
-    {
+    if (lookup_successful) {
       status.summary(diagnostic_msgs::DiagnosticStatus::OK, "ID Lookup successful");
-      
+
       // One of the tests should call setID() to fill the hardware
       // identifier in the self-test output. In cases that do not involve
       // hardware, or for which there is no hardware identifier, an
@@ -119,7 +119,7 @@ public:
   }
 
   // Tests do not necessarily need to catch their exceptions.
-  void test2(diagnostic_updater::DiagnosticStatusWrapper& status)
+  void test2(diagnostic_updater::DiagnosticStatusWrapper & status)
   {
     // Note, we start setting our status to success.  Since our
     // exception is not caught, however, the SelfTest class will
@@ -133,11 +133,12 @@ public:
     throw std::runtime_error("we did something that threw an exception");
 
     // Here's where we would report success if we'd made it past
-    status.summary(diagnostic_msgs::DiagnosticStatus::OK, "We made it past the exception throwing statement.");
+    status.summary(diagnostic_msgs::DiagnosticStatus::OK,
+      "We made it past the exception throwing statement.");
   }
 
   // The state of the node can be changed as the tests are operating
-  void test3(diagnostic_updater::DiagnosticStatusWrapper& status)
+  void test3(diagnostic_updater::DiagnosticStatusWrapper & status)
   {
     // Do something that changes the state of the node
     some_val += 41.0;
@@ -146,19 +147,17 @@ public:
     status.summary(diagnostic_msgs::DiagnosticStatus::OK, "We successfully changed the value.");
   }
 
-  void test4(diagnostic_updater::DiagnosticStatusWrapper& status)
+  void test4(diagnostic_updater::DiagnosticStatusWrapper & status)
   {
-    if (some_val == 42.0)
-    {
+    if (some_val == 42.0) {
       status.summary(diagnostic_msgs::DiagnosticStatus::OK, "We observed the change in value");
-    } 
-    else
-    {
-      status.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR, "We failed to observe the change in value, it is currently %f.", some_val);
+    } else {
+      status.summaryf(diagnostic_msgs::DiagnosticStatus::ERROR,
+        "We failed to observe the change in value, it is currently %f.", some_val);
     }
   }
 
-  void posttest(diagnostic_updater::DiagnosticStatusWrapper& status)
+  void posttest(diagnostic_updater::DiagnosticStatusWrapper & status)
   {
     ROS_INFO("Doing cleanup stuff after we run our test.\n");
     status.summary(diagnostic_msgs::DiagnosticStatus::OK, "Posttest completed successfully.");
@@ -166,11 +165,10 @@ public:
 
   bool spin()
   {
-    while (nh_.ok())
-    {
+    while (nh_.ok()) {
       //Do something important...
       ros::Duration(1).sleep();
-      
+
       // Calling checkTest tells the SelfTest class that it's ok
       // to actually run the test.  This gives you flexibility to
       // keep the SelfTest service from necessarily interrupting
@@ -182,7 +180,7 @@ public:
 };
 
 int
-main(int argc, char** argv)
+main(int argc, char ** argv)
 {
   ros::init(argc, argv, "my_node");
 
@@ -190,5 +188,5 @@ main(int argc, char** argv)
 
   n.spin();
 
-  return(0);
+  return 0;
 }

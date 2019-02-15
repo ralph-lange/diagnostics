@@ -33,7 +33,7 @@
  *********************************************************************/
 
 /*!
- * \author Kevin Watts 
+ * \author Kevin Watts
  */
 
 #ifndef _TEST_DIAGNOSTIC_AGGREGATOR_FAIL_INIT_ANALYZER_H_
@@ -46,7 +46,8 @@
 #include <pluginlib/class_list_macros.h>
 #include <string>
 
-namespace test_diagnostic_aggregator {
+namespace test_diagnostic_aggregator
+{
 
 class FailInitAnalyzer : public diagnostic_aggregator::Analyzer
 {
@@ -58,17 +59,17 @@ public:
 
   ~FailInitAnalyzer();
 
-  bool init(const std::string base_name, const ros::NodeHandle &n);
+  bool init(const std::string base_name, const ros::NodeHandle & n);
 
   bool match(const std::string name);
 
   bool analyze(const boost::shared_ptr<diagnostic_aggregator::StatusItem> item);
 
-  std::vector<boost::shared_ptr<diagnostic_msgs::DiagnosticStatus> > report();
+  std::vector<boost::shared_ptr<diagnostic_msgs::DiagnosticStatus>> report();
 
-  std::string getPath() const { return path_; }
+  std::string getPath() const {return path_;}
 
-  std::string getName() const { return nice_name_; }
+  std::string getName() const {return nice_name_;}
 };
 
 }

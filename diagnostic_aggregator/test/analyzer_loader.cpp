@@ -56,10 +56,10 @@ TEST(AnalyzerLoader, analyzerLoading)
   EXPECT_TRUE(analyzer_group.init(path, nh));
 }
 
-int main(int argc, char **argv)
+int main(int argc, char ** argv)
 {
   testing::InitGoogleTest(&argc, argv);
   ros::init(argc, argv, "analyzer_loader");
-  
+
   return RUN_ALL_TESTS();
 }
