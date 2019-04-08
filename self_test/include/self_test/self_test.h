@@ -91,7 +91,7 @@ namespace self_test
         node_handle_(h),
         private_node_handle_(ph)
     {
-      ROS_DEBUG("Advertising self_test");
+      /* @todo(anordman):logging RCLCPP_DEBUG(get_logger(), "Advertising self_test");*/
       ros::AdvertiseServiceOptions ops;//use options so that we can set callback queue directly
       ops.init<diagnostic_msgs::SelfTest::Request, diagnostic_msgs::SelfTest::Response>("self_test", boost::bind(&TestRunner::doTest, this, _1, _2));
       ops.callback_queue = &self_test_queue_;
@@ -147,7 +147,7 @@ namespace self_test
           {
             if (ros::isShuttingDown())
             {
-              ROS_ERROR("ROS has shut down. Exiting.");
+              /* @todo(anordman):logging RCLCPP_ERROR(get_logger(), "ROS has shut down. Exiting.");*/
               return false;
             }
             
@@ -169,13 +169,13 @@ namespace self_test
 
             if (status.level >= 1)
               if (verbose)
-                ROS_WARN("Non-zero self-test test status. Name: '%s', status %i: '%s'", status.name.c_str(), status.level, status.message.c_str());
+                /* @todo(anordman):logging RCLCPP_WARN(get_logger(), "Non-zero self-test test status. Name: '%s', status %i: '%s'", status.name.c_str(), status.level, status.message.c_str());*/
             
             status_vec.push_back(status);
           }
 
           if (!ignore_set_id_warn && id_.empty())
-            ROS_WARN("setID was not called by any self-test. The node author should be notified. If there is no suitable ID for this node, an ID of 'none' should be used.");
+            /* @todo(anordman):logging RCLCPP_WARN(get_logger(), "setID was not called by any self-test. The node author should be notified. If there is no suitable ID for this node, an ID of 'none' should be used.");*/
 
           //One of the test calls should use setID
           res.id = id_;
@@ -190,7 +190,7 @@ namespace self_test
           }
 
           if (res.passed && id_ == unspecified_id)
-            ROS_WARN("Self-test passed, but setID was not called. This is a bug in the driver. Please report it.");
+            /* @todo(anordman):logging RCLCPP_WARN(get_logger(), "Self-test passed, but setID was not called. This is a bug in the driver. Please report it.");*/
 
           res.status = status_vec;
 
