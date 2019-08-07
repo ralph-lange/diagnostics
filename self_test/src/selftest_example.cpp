@@ -74,7 +74,7 @@ public:
     // You can remove a test by using its name (documented in
     // diagnostic_updater).
     if (!self_test_.removeByName("Value testing test2"))
-      /* @todo(anordman):logging RCLCPP_ERROR(get_logger(), "Value testing test2 was not found when trying to remove it.");*/
+      ROS_ERROR("Value testing test2 was not found when trying to remove it.");
 
     // If any cleanup work needs to be done after running the tests,
     // a posttest can be defined. It is just like any other test, but 
