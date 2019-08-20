@@ -99,7 +99,7 @@ install(
   DESTINATION include
 )
 
-pluginlib_export_plugin_description_file(${PLUGIN_LIB} plugin_description.xml)
+pluginlib_export_plugin_description_file(${PROJECT_NAME} plugin_description.xml)
 
 ament_export_include_directories(include)
 ament_export_dependencies(ament_cmake)
