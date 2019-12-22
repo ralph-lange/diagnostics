@@ -75,7 +75,7 @@ Aggregator::Aggregator()
     if (param.first.compare("pub_rate") == 0) {
       pub_rate_ = param.second.as_double();
     } else if (param.first.compare("path") == 0) {
-      base_path_ = param.second.as_string();
+      base_path_.append(param.second.as_string());
     } else if (param.first.compare("other_as_errors") == 0) {
       other_as_errors = param.second.as_bool();
     }
