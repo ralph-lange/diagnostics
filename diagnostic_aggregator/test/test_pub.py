@@ -42,6 +42,8 @@ import rclpy
 from rclpy.clock import ROSClock
 from rclpy.node import Node
 
+from rclpy.qos import qos_profile_system_default
+
 PKG = 'diagnostic_aggregator'
 
 
